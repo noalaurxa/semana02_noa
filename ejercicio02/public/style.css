@@ -1,0 +1,14 @@
+table { 
+    border-collapse: collapse; 
+    width: 50%; 
+}
+th, td { 
+    border: 1px solid #ddd; 
+    padding: 8px; 
+    text-align: left; 
+}
+.resaltado { 
+    background-color: #d4edda; 
+    font-weight: bold; 
+    color: #155724; 
+}

@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Lista de Notas</title>
+    <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+    <h2>Registro de Notas</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Nombre</th>
+                <th>Nota</th>
+                <th>Estado</th>
+            </tr>
+        </thead>
+        <tbody>
+            {{#each listaEstudiantes}}
+            <tr {{#if (esMayor15 nota)}} class="resaltado" {{/if}}>
+                <td>{{nombre}}</td>
+                <td>{{nota}}</td>
+                <td>
+                    {{#if (esMayor15 nota)}}
+                        Sobresaliente
+                    {{else}}
+                        Regular
+                    {{/if}}
+                </td>
+            </tr>
+            {{/each}}
+        </tbody>
+    </table>
+    <br>
+    <a href="/">Volver al inicio</a>
+</body>
+</html>
