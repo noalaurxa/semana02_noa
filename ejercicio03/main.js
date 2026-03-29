@@ -48,25 +48,60 @@ const server = http.createServer((req, res) => {
 
     // RUTA: POST /ListByStatus
     else if (url === "/ListByStatus" && method === "POST") {
-        let body = "";
-        req.on("data", chunk => (body += chunk));
-        req.on("end", () => {
+    let body = "";
+    req.on("data", chunk => (body += chunk));
+    req.on("end", () => {
+        try {
             const { status } = JSON.parse(body);
-            res.statusCode = 200;
-            res.end(JSON.stringify(repo.getByStatus(status)));
-        });
-    }
 
-    // RUTA: POST /ListByGrade
-    else if (url === "/ListByGrade" && method === "POST") {
-        let body = "";
-        req.on("data", chunk => (body += chunk));
-        req.on("end", () => {
-            const { grade } = JSON.parse(body);
+            if (!status) {
+                res.statusCode = 400;
+                return res.end(JSON.stringify({ error: "Debe enviar el campo status" }));
+            }
+
+            const result = repo.getByStatus(status);
+
+            if (result.length === 0) {
+                res.statusCode = 404;
+                return res.end(JSON.stringify({ error: "No hay estudiantes con ese estado" }));
+            }
+
             res.statusCode = 200;
-            res.end(JSON.stringify(repo.getByGrade(grade)));
-        });
-    }
+            res.end(JSON.stringify(result));
+        } catch (error) {
+            res.statusCode = 400;
+            res.end(JSON.stringify({ error: "JSON inválido" }));
+        }
+    });
+}
+
+    else if (url === "/ListByGrade" && method === "POST") {
+    let body = "";
+    req.on("data", chunk => (body += chunk));
+    req.on("end", () => {
+        try {
+            const { grade } = JSON.parse(body);
+
+            if (grade === undefined) {
+                res.statusCode = 400;
+                return res.end(JSON.stringify({ error: "Debe enviar el campo grade" }));
+            }
+
+            const result = repo.getByGrade(grade);
+
+            if (result.length === 0) {
+                res.statusCode = 404;
+                return res.end(JSON.stringify({ error: "No hay estudiantes con ese promedio" }));
+            }
+
+            res.statusCode = 200;
+            res.end(JSON.stringify(result));
+        } catch (error) {
+            res.statusCode = 400;
+            res.end(JSON.stringify({ error: "JSON inválido" }));
+        }
+    });
+}
 
     // RUTA: PUT /students/:id
     else if (url.startsWith("/students/") && method === "PUT") {
